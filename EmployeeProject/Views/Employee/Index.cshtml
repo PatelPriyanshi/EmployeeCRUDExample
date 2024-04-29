@@ -1,0 +1,168 @@
+﻿@model IEnumerable<EmployeeProject.Models.EmployeeViewModel>
+
+
+@{
+    Layout = "_Layout";
+    var title = "Employees";
+    ViewData["Title"] = title;
+}
+
+<h2>@title</h2>
+
+<h3><a asp-action="Create" asp-controller="Employee" class="btn btn-success">Create</a></h3>
+
+<div class="form-group">
+    <label style="font-weight:bold;">Search by Tag Number:</label>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for tag number..">
+    <label style="font-weight:bold;">Search by Name:</label>
+    <input type="text" id="myInputName" onkeyup="myNameFunction()" placeholder="Search for names..">
+    <label style="font-weight:bold;">Search by Email:</label>
+    <input type="text" id="myInputEmail" onkeyup="myEmailFunction()" placeholder="Search for email..">
+</div>
+<br />
+<table class="table table-bordered table-sm table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th>EmployeeTagNumber</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Age</th>
+            <th>Designation</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null)
+        {
+            <tr>
+                <td colspan="9" class="text-center">
+                    No Data
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.EmployeeTagNumber</td>
+                    <td>@p.FirstName</td>
+                    <td>@p.LastName</td>
+                    <td>@p.Email</td>
+                    <td>@p.Department</td>
+                    <td>@p.Age</td>
+                    <td>@p.Designation</td>
+                    <td>
+                        <a asp-action="Update" asp-controller="Employee" asp-route-id="@p.Id" class="btn btn-primary">
+                            Update
+                        </a>
+                    </td>
+                    <td>
+                        <form asp-action="Delete" asp-controller="Employee" method="post" asp-route-id="@p.Id">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div>
+    @if (ViewBag.EndPage > 1)
+    {
+        <ul class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li>
+                    <a class="page-link" href="/Employee/Index">First</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="/Employee/Index?page=@(ViewBag.CurrentPage - 1)">Previous</a></li>
+            }
+            @for (var i = ViewBag.StartPage; i <= ViewBag.EndPage; i++)
+            {
+                <li class="@(((int)ViewBag.CurrentPage==i)?"active":"")">
+                    <a class="page-link" href="/Employee/Index?page=@i">
+                        @i
+                    </a>
+                </li>
+            }
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item"><a class="page-link" href="/Employee/Index?page=@(ViewBag.CurrentPage + 1)">Next</a></li>
+                <li>
+                    <a class="page-link" href="/Employee/Index?page=@(ViewBag.TotalPages)">Last</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myNameFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInputName");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myEmailFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInputEmail");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
